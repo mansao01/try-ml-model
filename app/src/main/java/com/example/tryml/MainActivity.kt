@@ -56,22 +56,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun outputGenerator(bitmap: Bitmap) {
 ////      declaring tensor flow lite model variable
-//        val birdModel = LiteModelAiyVisionClassifierBirdsV13.newInstance(this)
-//
+        val birdModel = LiteModelAiyVisionClassifierBirdsV13.newInstance(this)
+
 //// converting bitmap into tensor flow image
-//        val newBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-//        val tfImage = TensorImage.fromBitmap(newBitmap)
-//
+        val newBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val tfImage = TensorImage.fromBitmap(newBitmap)
+
 //// process the image using trained model and sort it ind descending order
-//        val outputs = birdModel.process(tfImage)
-//            .probabilityAsCategoryList.apply {
-//                sortByDescending { it.score }
-//           }
-//
+        val outputs = birdModel.process(tfImage)
+            .probabilityAsCategoryList.apply {
+                sortByDescending { it.score }
+           }
+
 ////       getting result having high probability
-//        val highProbabilityOutput = outputs[0]
-//        binding.tvResult.text = highProbabilityOutput.label
-//        Log.i("TAG", "outputGenerator $highProbabilityOutput")
+        val highProbabilityOutput = outputs[0]
+        binding.tvResult.text = highProbabilityOutput.label
+        Log.i("TAG", "outputGenerator $highProbabilityOutput")
 
 
 
