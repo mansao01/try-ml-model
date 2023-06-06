@@ -1,36 +1,31 @@
 package com.example.tryml
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.Instrumentation
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.MediaStore.Audio.Media
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.tryml.databinding.ActivityMainBinding
 import com.example.tryml.ml.LiteModelAiyVisionClassifierBirdsV13
 import com.example.tryml.ml.ModelV1
+import com.example.tryml.ml.Modelv1Revise2
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.metadata.schema.Content
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.IOException
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -72,9 +67,6 @@ class MainActivity : AppCompatActivity() {
         val highProbabilityOutput = outputs[0]
         binding.tvResult.text = highProbabilityOutput.label
         Log.i("TAG", "outputGenerator $highProbabilityOutput")
-
-
-
 
     }
 
@@ -155,22 +147,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun Bitmap.convertToByteBuffer(): ByteBuffer {
-        // Get the byte count of the bitmap.
-        val byteCount = byteCount
-
-        // Allocate a byte buffer with the same size as the bitmap.
-        val byteBuffer = ByteBuffer.allocate(byteCount)
-
-        // Copy the pixels from the bitmap to the byte buffer.
-        copyPixelsToBuffer(byteBuffer)
-
-        // Rewind the byte buffer so that it can be read from.
-        byteBuffer.rewind()
-
-        // Return the byte buffer.
-        return byteBuffer
-    }
-
 }
