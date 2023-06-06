@@ -49,25 +49,38 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun outputGenerator(bitmap: Bitmap) {
-////      declaring tensor flow lite model variable
-        val birdModel = LiteModelAiyVisionClassifierBirdsV13.newInstance(this)
+    private fun outputGenerator(mBitmap: Bitmap) {
 
-//// converting bitmap into tensor flow image
-        val newBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        val tfImage = TensorImage.fromBitmap(newBitmap)
+        try {
+            val model = Modelv1Revise2.newInstance(this)
+            val bitmap = Bitmap.createScaledBitmap(mBitmap, 224, 224, true)
 
-//// process the image using trained model and sort it ind descending order
-        val outputs = birdModel.process(tfImage)
-            .probabilityAsCategoryList.apply {
-                sortByDescending { it.score }
-           }
+            val inputFeature0 =
+                TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
 
-////       getting result having high probability
-        val highProbabilityOutput = outputs[0]
-        binding.tvResult.text = highProbabilityOutput.label
-        Log.i("TAG", "outputGenerator $highProbabilityOutput")
+            val tensorImage = TensorImage(DataType.FLOAT32)
+            tensorImage.load(bitmap)
+            val byteBuffer = tensorImage.buffer
 
+            inputFeature0.loadBuffer(byteBuffer)
+
+            val outputs = model.process(inputFeature0)
+            val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+
+            model.close()
+            Toast.makeText(this, outputFeature0.floatArray[0].toString(), Toast.LENGTH_LONG).show()
+//            binding.tvResult.text = outputFeature0.toString()
+//            Log.i("Result", outputFeature0.floatArray[0].toString())
+//            Log.i("Result", outputFeature0.floatArray[1].toString())
+            outputFeature0.floatArray.forEach {
+                Log.i("Result", it.toString())
+            }
+
+
+        } catch (e: IllegalArgumentException) {
+            Log.e("TAG", e.toString())
+
+        }
     }
 
     private fun onResultReceived(requestCode: Int, result: ActivityResult?) {
